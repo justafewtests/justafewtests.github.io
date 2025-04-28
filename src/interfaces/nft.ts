@@ -1,7 +1,8 @@
-export interface INFTItem {
+export interface INftItem {
+  address: string;
   image: string;
 }
 
-export interface INFTGridProps {
-  data: INFTItem[];
+export interface INftGridProps {
+  data: INftItem[];
 }

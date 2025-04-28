@@ -1,16 +1,21 @@
 import { useEffect, useRef } from "react";
 import "./App.css";
-import sampleNft from "./assets/nfts/yacht-club-monkey.png";
+// import sampleNft from "./assets/nfts/yacht-club-monkey.png";
 
 import WebApp from "@twa-dev/sdk";
-import { useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
-import { NFTGrid } from "./components/NFTGrid";
+import {
+  TonConnectButton,
+  useTonConnectUI,
+  useTonWallet,
+} from "@tonconnect/ui-react";
+import { NftGrid } from "./components/NftGrid";
+import { useNfts } from "./hooks/useNft";
 
 function App() {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
-
   const walletRef = useRef(wallet);
+  const { nfts, loading, error } = useNfts(wallet);
 
   useEffect(() => {
     walletRef.current = wallet;
@@ -33,18 +38,10 @@ function App() {
   return (
     <>
       <main className="main">
-        <NFTGrid
-          data={Array.from({ length: 5 }, (_, i) => ({
-            id: i + 1,
-            image: sampleNft,
-          }))}
-        />
-        <NFTGrid
-          data={Array.from({ length: 5 }, (_, i) => ({
-            id: i + 1,
-            image: sampleNft,
-          }))}
-        />
+        {loading && <p>Loading NFTs...</p>}
+        {error && <p>{error}</p>}
+        {!loading && !error && <NftGrid data={nfts} />}
+        <TonConnectButton />
       </main>
     </>
   );
